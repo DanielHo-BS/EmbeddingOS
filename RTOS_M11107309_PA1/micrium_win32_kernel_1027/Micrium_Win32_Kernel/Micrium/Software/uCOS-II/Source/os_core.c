@@ -870,12 +870,23 @@ void  OSSchedUnlock (void)
 
 void  OSStart (void)
 {
+    OS_TCB* ptcb;
     if (OSRunning == OS_FALSE) {
 
         OS_SchedNew();                               /* Find highest priority's task priority number   */
         OSPrioCur     = OSPrioHighRdy;
         OSTCBHighRdy  = OSTCBPrioTbl[OSPrioHighRdy]; /* Point to highest priority task ready to run    */
         OSTCBCur      = OSTCBHighRdy;
+        ptcb = OSTCBList;
+        printf("================TCB linked list================\n");
+        printf("Task    Prev_TCB_addr   TCB_addr   Next_TCB_addr\n");
+        while (ptcb->OSTCBPrio != OS_TASK_IDLE_PRIO) {     /* Go through all TCBs in TCB list              */
+            OS_ENTER_CRITICAL();
+            printf("%2d\t     %6x\t  %6x\t%6x\n", ptcb->OSTCBPrio, ptcb->OSTCBPrev, ptcb, ptcb->OSTCBNext);
+            ptcb = ptcb->OSTCBNext;                        /* Point at next TCB in TCB list                */
+            OS_EXIT_CRITICAL();
+        }
+        printf("%2d\t     %6x\t  %6x\t%6x\n", ptcb->OSTCBPrio, ptcb->OSTCBPrev, ptcb, ptcb->OSTCBNext);
         OSStartHighRdy();                            /* Execute target specific code to start task     */
     }
 }
@@ -988,6 +999,7 @@ void  OSTimeTick (void)
             return;
         }
 #endif
+        
         ptcb = OSTCBList;                                  /* Point at first TCB in TCB list               */
         while (ptcb->OSTCBPrio != OS_TASK_IDLE_PRIO) {     /* Go through all TCBs in TCB list              */
             OS_ENTER_CRITICAL();
@@ -2133,9 +2145,9 @@ INT8U  OS_TCBInit (INT8U    prio,
         }
         OSTCBList               = ptcb;
         printf("------After TCB[%2d] being linked------\n", prio);
-        printf("Previous TCB point to address\t%x\n", ptcb->OSTCBPrev);
-        printf("Current  TCB point to address\t%x\n", ptcb->OSTCBStkPtr);
-        printf("Next     TCB point to address\t%x\n\n", ptcb->OSTCBNext);
+        printf("Previous TCB point to address\t%6x\n", ptcb->OSTCBPrev);
+        printf("Current  TCB point to address\t%6x\n", ptcb);
+        printf("Next     TCB point to address\t%6x\n\n", ptcb->OSTCBNext);
 
 
         OSRdyGrp               |= ptcb->OSTCBBitY;         /* Make task ready to run                   */

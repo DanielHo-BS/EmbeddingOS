@@ -623,7 +623,7 @@ void  OSTCBInitHook (OS_TCB  *p_tcb)
     }
 
 #if (OS_MSG_TRACE > 0u)
-    OS_Printf("Task[%2d] created, TCB Address\t%x\n", p_tcb->OSTCBPrio, p_tcb->OSTCBStkPtr);
+    OS_Printf("Task[%2d] created, TCB Address\t%6x\n", p_tcb->OSTCBPrio, p_tcb);
 #endif
 
     p_stk->TaskState = STATE_CREATED;
