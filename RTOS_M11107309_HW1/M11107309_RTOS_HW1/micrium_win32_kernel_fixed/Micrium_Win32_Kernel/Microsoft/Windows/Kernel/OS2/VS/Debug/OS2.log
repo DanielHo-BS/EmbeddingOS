@@ -1,0 +1,3 @@
+﻿  os_core.c
+D:\EmbeddingOS\HW2\micrium_win32_kernel_1027\Micrium_Win32_Kernel\Micrium\Software\uCOS-II\Source\os_core.c(996,13): warning C4013: 'exit' 未定義; 假設 extern 傳回整數
+  OS2.vcxproj -> D:\EmbeddingOS\HW2\micrium_win32_kernel_1027\Micrium_Win32_Kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe

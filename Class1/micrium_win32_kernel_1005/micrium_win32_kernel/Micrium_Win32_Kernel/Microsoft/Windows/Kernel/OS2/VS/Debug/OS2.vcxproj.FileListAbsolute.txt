@@ -1,0 +1,4 @@
+C:\Users\user\Desktop\micrium_win32_kernel\Micrium_Win32_Kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe
+D:\ntust\EmbeddingOS\micrium_win32_kernel_1005\micrium_win32_kernel\Micrium_Win32_Kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe
+D:\micrium_win32_kernel_1005\micrium_win32_kernel\Micrium_Win32_Kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe
+D:\EmbeddingOS\micrium_win32_kernel_1005\micrium_win32_kernel\Micrium_Win32_Kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe

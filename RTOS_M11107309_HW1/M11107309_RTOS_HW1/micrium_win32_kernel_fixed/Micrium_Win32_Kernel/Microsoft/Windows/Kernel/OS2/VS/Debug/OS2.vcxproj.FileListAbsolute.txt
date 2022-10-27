@@ -1,0 +1,6 @@
+C:\Users\user\Desktop\micrium_win32_kernel\Micrium_Win32_Kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe
+D:\ntust\EmbeddingOS\micrium_win32_kernel_1005\micrium_win32_kernel\Micrium_Win32_Kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe
+D:\ntust\EmbeddingOS\2022.1005\micrium_win32_kernel_class\micrium_win32_kernel\Micrium_Win32_Kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe
+D:\ntust\EmbeddingOS\2022.1005\M11107309_RTOS_HW1\micrium_win32_kernel\Micrium_Win32_Kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe
+D:\EmbeddingOS\micrium_win32_kernel_1027\Micrium_Win32_Kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe
+D:\EmbeddingOS\HW2\micrium_win32_kernel_1027\Micrium_Win32_Kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe
