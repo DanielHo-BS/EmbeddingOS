@@ -64,8 +64,7 @@ static  OS_STK  StartupTaskStk[APP_CFG_STARTUP_TASK_STK_SIZE];
 *********************************************************************************************************
 */
 
-static  void task1(void* p_arg);
-static  void task2(void* p_arg);
+static  void task(void* p_arg);
 static  void  StartupTask (void  *p_arg);
 
 
@@ -111,28 +110,42 @@ int  main (void)
         Task_STK[n] = malloc(TASK_STACKSIZE * sizeof(int));
     }
  
+    /* For RM scheduling : need to sort the period for priority of task.
+       The task which has longest period has the lowest priority.
+    */
+    int i, j, key;
+    task_para_set tmp_TaskParameter;
+    for (i = 1; i < TASK_NUMBER; i++)       /* Start from the second task to sort, so i =1 */
+    {
+        key = TaskParameter[i].TaskPeriodic;
+        tmp_TaskParameter = TaskParameter[i];
+        j = i - 1;
+        while (i >= 0 && TaskParameter[i].TaskPeriodic > key) /* Compare the period. If > key, move to the behind */
+        {
+            TaskParameter[i + 1] = TaskParameter[i];
+            i = i - 1;
+        }
+        TaskParameter[i + 1] = tmp_TaskParameter; /* Insert the tmp */
+    }
 
-    OSTaskCreateExt(task1,                               /* Create the task1*/
-        &TaskParameter[0],
-        &Task_STK[0][TASK_STACKSIZE - 1],
-        TaskParameter[0].TaskPriority,
-        TaskParameter[0].TaskID,
-        &Task_STK[0][0],
-        TASK_STACKSIZE,
-        &TaskParameter[0],
-        (OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR));
-    TaskCtr[0] = 0;
 
-    OSTaskCreateExt(task2,                               /* Create the task2*/
-        &TaskParameter[1],
-        &Task_STK[1][TASK_STACKSIZE - 1],
-        TaskParameter[1].TaskPriority,
-        TaskParameter[1].TaskID,
-        &Task_STK[1][0],
-        TASK_STACKSIZE,
-        &TaskParameter[1],
-        (OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR));
-    TaskCtr[1] = 0;
+    // PA1: Create the task
+    for (n = 0; n < TASK_NUMBER; n++)
+    {
+        OSTaskCreateExt(task,                            // Task Function   
+            &TaskParameter[n],                            // p_arg
+            &Task_STK[n][TASK_STACKSIZE - 1],             // ptop
+            n + 1,                                        // prio (PA1 asks the priority start from 1)
+            TaskParameter[n].TaskID,                      // id
+            &Task_STK[n][0],                              // pbos
+            TASK_STACKSIZE,                               // stack size
+            &TaskParameter[n],                            // pext(TCB extension's pointer)
+            (OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR)); // opt
+        TASK_CONTER[n] = 0;
+    }
+    
+
+
 
 /*   OSTaskCreateExt( StartupTask,                               /* Create the startup task*/
         /*            0,
@@ -174,39 +187,80 @@ int  main (void)
 *********************************************************************************************************
 */
 
-void task1(void* p_arg) 
+void task(void* p_arg) 
 {
     task_para_set* task_data;
     task_data = p_arg;
+    
+    int TaskRdyTime = task_data->TaskArriveTime;
+    int TaskRdyTimeNext, TaskExtTime, TaskStartTime, TaskDelayTime;
+
+    if (OSTimeGet() < TaskRdyTime)
+    {
+        OSTimeDly(TaskRdyTime - OSTimeGet());
+    }
+
     while (1)
     {
-        
-        /*printf("Tick: %d, Hello from task%d\n", OSTime, task_data->TaskID);
-        if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0)
+        OSTCBCur->SelfContinue = 0;
+        TaskRdyTimeNext = TaskRdyTime + task_data->TaskPeriodic;
+        OSTCBCur->TaskTimeNext = TaskRdyTimeNext;
+        TaskExtTime = task_data->TaskExecutionTime;
+        TaskStartTime = OSTimeGet();
+
+        while (1) /*if the task return from Interrput*/
         {
-            fprintf(Output_fp, "Tick: %d, Hello from task%d\n", OSTime, task_data->TaskID);
-            fclose(Output_fp);
+            if (OSTimeGet() != TaskStartTime)
+            {
+                TaskExtTime--;
+                OSTCBCur->RemainExeTime = TaskExtTime;
+                if (TaskExtTime == 0)
+                {
+                    break;
+                }
+                TaskStartTime = OSTimeGet();
+            }
+        }
+
+        TaskRdyTime = TaskRdyTimeNext; // Pre-update 
+
+        if (OSTCBCur->RdyDelay == 1)
+        {
+            OSTCBCur->RdyDelay = 0;
+            continue;
+        }
+
+        TaskDelayTime = TaskRdyTimeNext - OSTimeGet();
+        if (TaskDelayTime == 0)
+        {
+            OSTCBCur->SelfContinue = 1;
+            OS_Sched();
+        }
+        /*else if (TaskDelayTime < 0)
+        {
+            printf("TaskID %2d miss deadline at tick %2d !\n", task_data->TaskID, OSTimeGet());
         }*/
+
         OSTimeDly(task_data->TaskPeriodic);
     }
 }
 
-void task2(void* p_arg)
+/*void task2(void* p_arg)
 {
     task_para_set* task_data;
     task_data = p_arg;
     while (1)
     {
         
-        /*printf("Tick: %d, Hello from task%d\n", OSTime, task_data->TaskID);
+        printf("Tick: %d, Hello from task%d\n", OSTime, task_data->TaskID);
         if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0)
         {
             fprintf(Output_fp, "Tick: %d, Hello from task%d\n", OSTime, task_data->TaskID);
             fclose(Output_fp);
-        }*/
+        }
         OSTimeDly(task_data->TaskPeriodic);
     }
-}
+}*/
 
 static  void  StartupTask (void *p_arg)
 {

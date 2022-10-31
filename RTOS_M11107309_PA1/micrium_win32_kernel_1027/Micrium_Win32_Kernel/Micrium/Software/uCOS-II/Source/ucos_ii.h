@@ -91,7 +91,7 @@ typedef struct task_para_set {
 } task_para_set;
 
 int TASK_NUMBER;                //Number of the input tasks
-int TaskCtr[2];                 //Task counter
+int TASK_CONTER[64];            //Task counter
 /*Task structure*/
 
 /*Dynamic Create the Stack size*/
@@ -652,6 +652,13 @@ typedef struct os_tcb {
     INT8U            OSTCBY;                /* Index into ready table corresponding to task priority   */
     OS_PRIO          OSTCBBitX;             /* Bit mask to access bit position in ready table          */
     OS_PRIO          OSTCBBitY;             /* Bit mask to access bit position in ready group          */
+
+    /* PA1 */
+    INT8U            RdyDelay;
+    INT8U            RemainExeTime;
+    INT8U            TaskTimeNext;
+    INT8U            SelfContinue;
+
 
 #if OS_TASK_DEL_EN > 0u
     INT8U            OSTCBDelReq;           /* Indicates whether a task needs to delete itself         */

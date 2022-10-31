@@ -887,6 +887,8 @@ void  OSStart (void)
             OS_EXIT_CRITICAL();
         }
         printf("%2d\t     %6x\t  %6x\t%6x\n", ptcb->OSTCBPrio, ptcb->OSTCBPrev, ptcb, ptcb->OSTCBNext);
+
+        printf("\nTick\tEvent\t\tCreateTask ID\tNextTask ID\tResponseTime  #of ContextSwitch  PreemptionTime  OSTimeDly\n");
         OSStartHighRdy();                            /* Execute target specific code to start task     */
     }
 }
@@ -947,6 +949,8 @@ void  OSStatInit (void)
 * Returns    : none
 *********************************************************************************************************
 */
+
+int task_start_time[64] = { 0 };
 
 void  OSTimeTick (void)
 {
@@ -1017,6 +1021,9 @@ void  OSTimeTick (void)
                     if ((ptcb->OSTCBStat & OS_STAT_SUSPEND) == OS_STAT_RDY) {  /* Is task suspended?       */
                         OSRdyGrp               |= ptcb->OSTCBBitY;             /* No,  Make ready          */
                         OSRdyTbl[ptcb->OSTCBY] |= ptcb->OSTCBBitX;
+
+                        task_start_time[ptcb->OSTCBPrio] = OSTimeGet();        /* save the time when task is ready for response time */
+
                         OS_TRACE_TASK_READY(ptcb);
                     }
                 }
@@ -1742,7 +1749,6 @@ void  OS_Sched (void)
                 OS_TLS_TaskSw();
 #endif
 #endif
-
                 OS_TASK_SW();                          /* Perform a context switch                     */
             }
         }
@@ -1766,6 +1772,10 @@ void  OS_Sched (void)
 *              2) Interrupts are assumed to be disabled when this function is called.
 *********************************************************************************************************
 */
+int OSMapTbl[8] = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80 };
+int task_preempt_cont[64] = { 0 };
+int task_preempt_time_acc[64] = { 0 };
+int task_preempt_time[64] = { 0 };
 
 static  void  OS_SchedNew (void)
 {
@@ -1775,6 +1785,112 @@ static  void  OS_SchedNew (void)
 
     y             = OSUnMapTbl[OSRdyGrp];
     OSPrioHighRdy = (INT8U)((y << 3u) + OSUnMapTbl[OSRdyTbl[y]]);
+
+    // PA1
+    if (OSPrioCur == 0)                         /*Check the OSStart_init finish*/
+    {
+        task_start_time[OSPrioHighRdy] = OSTimeGet();
+    }
+    else if ( (OSPrioCur != OSPrioHighRdy) && OSTimeGet() != 0)
+    {
+        if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) != 0)
+        {
+            printf("Can't open Output.txt");
+            exit(0);
+        }
+        printf("%2d\t", OSTimeGet());
+        fprintf(Output_fp, "%2d\t", OSTimeGet());
+
+        // ========Completion========
+        if ((OSRdyTbl[OSPrioCur >> 3] & OSMapTbl[OSPrioCur & 0x07]) == 0)     /* Task is finished and waitting */
+        {
+            printf("Completion\t");
+            fprintf(Output_fp, "Completion\t");
+
+            // CurrentTask
+            printf("task(%2d)(%2d)\t", OSTCBPrioTbl[OSPrioCur]->OSTCBId, TASK_CONTER[OSPrioCur]);
+            fprintf(Output_fp, "task(%2d)(%2d)\t", OSTCBPrioTbl[OSPrioCur]->OSTCBId, TASK_CONTER[OSPrioCur]);
+
+            // NextTask
+            if (OSPrioHighRdy == 63)
+            {
+                printf("task(%2d)\t", OSPrioHighRdy);
+                fprintf(Output_fp, "task(%2d)\t", OSPrioHighRdy);
+            }
+            else 
+            {
+                printf("task(%2d)(%2d)\t", OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TASK_CONTER[OSPrioHighRdy]);
+                fprintf(Output_fp, "task(%2d)(%2d)\t", OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TASK_CONTER[OSPrioHighRdy]);
+            }
+            
+            // ReponseTime
+            printf("   %5d\t", (OSTimeGet() - task_start_time[OSPrioCur]));
+            fprintf(Output_fp, "   %5d\t", (OSTimeGet() - task_start_time[OSPrioCur]));
+
+            // #of ContextSwitch
+            task_preempt_cont[OSPrioCur]++;
+            printf("  %5d\t\t", task_preempt_cont[OSPrioCur]);
+            fprintf(Output_fp, "  %5d\t\t", task_preempt_cont[OSPrioCur]);
+
+            // PreemptionTime
+            printf(" %5d\t\t", task_preempt_time_acc[OSPrioCur]);
+            fprintf(Output_fp, " %5d\t\t", task_preempt_time_acc[OSPrioCur]);
+
+            // DelayTime: Period - ResponseTime
+            printf("%5d\n", (TaskParameter[OSPrioCur - 1].TaskPeriodic - (OSTimeGet() - task_start_time[OSPrioCur])));
+            fprintf(Output_fp, "%5d\n", (TaskParameter[OSPrioCur - 1].TaskPeriodic - (OSTimeGet() - task_start_time[OSPrioCur])));
+
+            task_preempt_cont[OSPrioCur] = 0;
+            task_preempt_time[OSPrioCur] = 0;
+            task_preempt_time_acc[OSPrioCur] = 0;
+
+            if (task_preempt_time[OSPrioHighRdy] != 0) /* If the next task has been preemp */
+            {
+                task_preempt_time_acc[OSPrioHighRdy] = task_preempt_time_acc[OSPrioHighRdy] + (OSTimeGet() - task_preempt_time[OSPrioHighRdy]);
+            }
+
+            task_preempt_cont[OSPrioHighRdy]++;
+
+            TASK_CONTER[OSPrioCur]++;
+        }
+        // ========Preeemption========
+        else                                        /* Low Prio to High Prio */
+        {
+            printf("Preemption\t");
+            fprintf(Output_fp, "Preemption\t");   
+
+            // CurrentTask
+            if (OSPrioCur == 63)
+            {
+                printf("task(%2d)\t", OSPrioCur);
+                fprintf(Output_fp, "task(%2d)\t", OSPrioCur);
+            }
+            else
+            {
+                printf("task(%2d)(%2d)\t", OSTCBPrioTbl[OSPrioCur]->OSTCBId, TASK_CONTER[OSPrioCur]);
+                fprintf(Output_fp, "task(%2d)(%2d)\t", OSTCBPrioTbl[OSPrioCur]->OSTCBId, TASK_CONTER[OSPrioCur]);
+            }
+
+            // NextTask
+            if (OSPrioHighRdy == 63)
+            {
+                printf("task(%2d)\n", OSPrioHighRdy);
+                fprintf(Output_fp, "task(%2d)\n", OSPrioHighRdy);
+            }
+            else
+            {
+                printf("task(%2d)(%2d)\n", OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TASK_CONTER[OSPrioHighRdy]);
+                fprintf(Output_fp, "task(%2d)(%2d)\n", OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TASK_CONTER[OSPrioHighRdy]);
+            }
+
+            task_preempt_time[OSPrioCur] = OSTimeGet();
+            task_preempt_cont[OSPrioCur]++;
+            task_preempt_cont[OSPrioHighRdy]++;
+            
+        }
+        fclose(Output_fp);
+    }
+    // PA1
 #else                                            /* We support up to 256 tasks                         */
     INT8U     y;
     OS_PRIO  *ptbl;
