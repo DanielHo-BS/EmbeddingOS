@@ -91,7 +91,6 @@ typedef struct task_para_set {
 } task_para_set;
 
 int TASK_NUMBER;                //Number of the input tasks
-int TASK_CONTER[64];            //Task counter
 /*Task structure*/
 
 /*Dynamic Create the Stack size*/

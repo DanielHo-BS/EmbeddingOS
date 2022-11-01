@@ -1773,9 +1773,10 @@ void  OS_Sched (void)
 *********************************************************************************************************
 */
 int OSMapTbl[8] = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80 };
-int task_preempt_cont[64] = { 0 };
+int task_preempt_counter[64] = { 0 };
 int task_preempt_time_acc[64] = { 0 };
 int task_preempt_time[64] = { 0 };
+int task_counter[64] = { 0 };
 
 static  void  OS_SchedNew (void)
 {
@@ -1791,36 +1792,39 @@ static  void  OS_SchedNew (void)
     {
         task_start_time[OSPrioHighRdy] = OSTimeGet();
     }
-    else if ( (OSPrioCur != OSPrioHighRdy) && OSTimeGet() != 0)
+    else if (OSTimeGet() != 0)
     {
         if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) != 0)
         {
             printf("Can't open Output.txt");
             exit(0);
         }
-        printf("%2d\t", OSTimeGet());
-        fprintf(Output_fp, "%2d\t", OSTimeGet());
+
 
         // ========Completion========
         if ((OSRdyTbl[OSPrioCur >> 3] & OSMapTbl[OSPrioCur & 0x07]) == 0)     /* Task is finished and waitting */
         {
+            printf("%2d\t", OSTimeGet());
+            fprintf(Output_fp, "%2d\t", OSTimeGet());
+            
             printf("Completion\t");
             fprintf(Output_fp, "Completion\t");
 
             // CurrentTask
-            printf("task(%2d)(%2d)\t", OSTCBPrioTbl[OSPrioCur]->OSTCBId, TASK_CONTER[OSPrioCur]);
-            fprintf(Output_fp, "task(%2d)(%2d)\t", OSTCBPrioTbl[OSPrioCur]->OSTCBId, TASK_CONTER[OSPrioCur]);
+            printf("task(%2d)(%2d)\t", OSTCBPrioTbl[OSPrioCur]->OSTCBId, task_counter[OSPrioCur]);
+            fprintf(Output_fp, "task(%2d)(%2d)\t", OSTCBPrioTbl[OSPrioCur]->OSTCBId, task_counter[OSPrioCur]);
+            task_counter[OSPrioCur]++;
 
             // NextTask
             if (OSPrioHighRdy == 63)
             {
-                printf("task(%2d)\t", OSPrioHighRdy);
-                fprintf(Output_fp, "task(%2d)\t", OSPrioHighRdy);
+                printf("task(%2d)    \t", OSPrioHighRdy);
+                fprintf(Output_fp, "task(%2d)    \t", OSPrioHighRdy);
             }
             else 
             {
-                printf("task(%2d)(%2d)\t", OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TASK_CONTER[OSPrioHighRdy]);
-                fprintf(Output_fp, "task(%2d)(%2d)\t", OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TASK_CONTER[OSPrioHighRdy]);
+                printf("task(%2d)(%2d)\t", OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, task_counter[OSPrioHighRdy]);
+                fprintf(Output_fp, "task(%2d)(%2d)\t", OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, task_counter[OSPrioHighRdy]);
             }
             
             // ReponseTime
@@ -1828,9 +1832,9 @@ static  void  OS_SchedNew (void)
             fprintf(Output_fp, "   %5d\t", (OSTimeGet() - task_start_time[OSPrioCur]));
 
             // #of ContextSwitch
-            task_preempt_cont[OSPrioCur]++;
-            printf("  %5d\t\t", task_preempt_cont[OSPrioCur]);
-            fprintf(Output_fp, "  %5d\t\t", task_preempt_cont[OSPrioCur]);
+            task_preempt_counter[OSPrioCur]++;
+            printf("  %5d\t\t", task_preempt_counter[OSPrioCur]);
+            fprintf(Output_fp, "  %5d\t\t", task_preempt_counter[OSPrioCur]);
 
             // PreemptionTime
             printf(" %5d\t\t", task_preempt_time_acc[OSPrioCur]);
@@ -1840,7 +1844,7 @@ static  void  OS_SchedNew (void)
             printf("%5d\n", (TaskParameter[OSPrioCur - 1].TaskPeriodic - (OSTimeGet() - task_start_time[OSPrioCur])));
             fprintf(Output_fp, "%5d\n", (TaskParameter[OSPrioCur - 1].TaskPeriodic - (OSTimeGet() - task_start_time[OSPrioCur])));
 
-            task_preempt_cont[OSPrioCur] = 0;
+            task_preempt_counter[OSPrioCur] = 0;
             task_preempt_time[OSPrioCur] = 0;
             task_preempt_time_acc[OSPrioCur] = 0;
 
@@ -1849,26 +1853,28 @@ static  void  OS_SchedNew (void)
                 task_preempt_time_acc[OSPrioHighRdy] = task_preempt_time_acc[OSPrioHighRdy] + (OSTimeGet() - task_preempt_time[OSPrioHighRdy]);
             }
 
-            task_preempt_cont[OSPrioHighRdy]++;
-
-            TASK_CONTER[OSPrioCur]++;
+            task_preempt_counter[OSPrioHighRdy]++;
+            
         }
         // ========Preeemption========
-        else                                        /* Low Prio to High Prio */
+        else if (OSPrioCur != OSPrioHighRdy)                                        /* Low Prio to High Prio */
         {
+            printf("%2d\t", OSTimeGet());
+            fprintf(Output_fp, "%2d\t", OSTimeGet());
+            
             printf("Preemption\t");
             fprintf(Output_fp, "Preemption\t");   
 
             // CurrentTask
             if (OSPrioCur == 63)
             {
-                printf("task(%2d)\t", OSPrioCur);
-                fprintf(Output_fp, "task(%2d)\t", OSPrioCur);
+                printf("task(%2d)    \t", OSPrioCur);
+                fprintf(Output_fp, "task(%2d)    \t", OSPrioCur);
             }
             else
             {
-                printf("task(%2d)(%2d)\t", OSTCBPrioTbl[OSPrioCur]->OSTCBId, TASK_CONTER[OSPrioCur]);
-                fprintf(Output_fp, "task(%2d)(%2d)\t", OSTCBPrioTbl[OSPrioCur]->OSTCBId, TASK_CONTER[OSPrioCur]);
+                printf("task(%2d)(%2d)\t", OSTCBPrioTbl[OSPrioCur]->OSTCBId, task_counter[OSPrioCur]);
+                fprintf(Output_fp, "task(%2d)(%2d)\t", OSTCBPrioTbl[OSPrioCur]->OSTCBId, task_counter[OSPrioCur]);
             }
 
             // NextTask
@@ -1879,13 +1885,13 @@ static  void  OS_SchedNew (void)
             }
             else
             {
-                printf("task(%2d)(%2d)\n", OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TASK_CONTER[OSPrioHighRdy]);
-                fprintf(Output_fp, "task(%2d)(%2d)\n", OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, TASK_CONTER[OSPrioHighRdy]);
+                printf("task(%2d)(%2d)\n", OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, task_counter[OSPrioHighRdy]);
+                fprintf(Output_fp, "task(%2d)(%2d)\n", OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, task_counter[OSPrioHighRdy]);
             }
 
             task_preempt_time[OSPrioCur] = OSTimeGet();
-            task_preempt_cont[OSPrioCur]++;
-            task_preempt_cont[OSPrioHighRdy]++;
+            task_preempt_counter[OSPrioCur]++;
+            task_preempt_counter[OSPrioHighRdy]++;
             
         }
         fclose(Output_fp);

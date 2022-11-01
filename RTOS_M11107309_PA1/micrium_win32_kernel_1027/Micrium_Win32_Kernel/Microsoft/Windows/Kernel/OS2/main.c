@@ -141,7 +141,6 @@ int  main (void)
             TASK_STACKSIZE,                               // stack size
             &TaskParameter[n],                            // pext(TCB extension's pointer)
             (OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR)); // opt
-        TASK_CONTER[n] = 0;
     }
     
 
@@ -241,7 +240,7 @@ void task(void* p_arg)
             printf("TaskID %2d miss deadline at tick %2d !\n", task_data->TaskID, OSTimeGet());
         }*/
 
-        OSTimeDly(task_data->TaskPeriodic);
+        OSTimeDly(TaskDelayTime);
     }
 }
 
