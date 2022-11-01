@@ -1,0 +1,12 @@
+﻿  os_core.c
+D:\ntust\EmbeddingOS\RTOS_M11107309_PA1\RTOS_M11107309_PA1\Micrium\Software\uCOS-II\Source\os_core.c(889,20): warning C4477: 'printf' : 格式字串 '%6x' 需要 'unsigned int' 類型的引數，但 variadic 引數 2 的類型為 'os_tcb *'
+D:\ntust\EmbeddingOS\RTOS_M11107309_PA1\RTOS_M11107309_PA1\Micrium\Software\uCOS-II\Source\os_core.c(889,20): warning C4477: 'printf' : 格式字串 '%6x' 需要 'unsigned int' 類型的引數，但 variadic 引數 3 的類型為 'OS_TCB *'
+D:\ntust\EmbeddingOS\RTOS_M11107309_PA1\RTOS_M11107309_PA1\Micrium\Software\uCOS-II\Source\os_core.c(889,20): warning C4477: 'printf' : 格式字串 '%6x' 需要 'unsigned int' 類型的引數，但 variadic 引數 4 的類型為 'os_tcb *'
+D:\ntust\EmbeddingOS\RTOS_M11107309_PA1\RTOS_M11107309_PA1\Micrium\Software\uCOS-II\Source\os_core.c(893,16): warning C4477: 'printf' : 格式字串 '%6x' 需要 'unsigned int' 類型的引數，但 variadic 引數 2 的類型為 'os_tcb *'
+D:\ntust\EmbeddingOS\RTOS_M11107309_PA1\RTOS_M11107309_PA1\Micrium\Software\uCOS-II\Source\os_core.c(893,16): warning C4477: 'printf' : 格式字串 '%6x' 需要 'unsigned int' 類型的引數，但 variadic 引數 3 的類型為 'OS_TCB *'
+D:\ntust\EmbeddingOS\RTOS_M11107309_PA1\RTOS_M11107309_PA1\Micrium\Software\uCOS-II\Source\os_core.c(893,16): warning C4477: 'printf' : 格式字串 '%6x' 需要 'unsigned int' 類型的引數，但 variadic 引數 4 的類型為 'os_tcb *'
+D:\ntust\EmbeddingOS\RTOS_M11107309_PA1\RTOS_M11107309_PA1\Micrium\Software\uCOS-II\Source\os_core.c(997,17): warning C4013: 'exit' 未定義; 假設 extern 傳回整數
+D:\ntust\EmbeddingOS\RTOS_M11107309_PA1\RTOS_M11107309_PA1\Micrium\Software\uCOS-II\Source\os_core.c(2423,16): warning C4477: 'printf' : 格式字串 '%6x' 需要 'unsigned int' 類型的引數，但 variadic 引數 1 的類型為 'os_tcb *'
+D:\ntust\EmbeddingOS\RTOS_M11107309_PA1\RTOS_M11107309_PA1\Micrium\Software\uCOS-II\Source\os_core.c(2424,16): warning C4477: 'printf' : 格式字串 '%6x' 需要 'unsigned int' 類型的引數，但 variadic 引數 1 的類型為 'OS_TCB *'
+D:\ntust\EmbeddingOS\RTOS_M11107309_PA1\RTOS_M11107309_PA1\Micrium\Software\uCOS-II\Source\os_core.c(2425,16): warning C4477: 'printf' : 格式字串 '%6x' 需要 'unsigned int' 類型的引數，但 variadic 引數 1 的類型為 'os_tcb *'
+  OS2.vcxproj -> D:\ntust\EmbeddingOS\RTOS_M11107309_PA1\RTOS_M11107309_PA1\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe

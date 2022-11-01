@@ -1,3 +1,0 @@
-C:\Users\D\Desktop\RTOS_B10707119_PA1\RTOS_B10707119_PA1\Micrium_Win32_Kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe
-D:\ntust\EmbeddingOS\RTOS_M11107309_PA1\Micrium_Win32_Kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe
-C:\Users\D\Desktop\Micrium_Win32_Kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe
