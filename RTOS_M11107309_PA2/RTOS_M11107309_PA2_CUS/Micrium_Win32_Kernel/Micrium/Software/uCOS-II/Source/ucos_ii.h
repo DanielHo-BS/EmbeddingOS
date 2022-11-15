@@ -55,7 +55,7 @@ extern "C" {
 #include <os_cpu.h>
 #include "os_trace.h"
 
-/// ¬°¤FÅª¨útxtÀÉ
+/// ï¿½ï¿½ï¿½FÅªï¿½ï¿½txtï¿½ï¿½
 #include <string.h>
 
 /*
@@ -64,24 +64,24 @@ extern "C" {
 *********************************************************************************************************
 */
 
-/// µ²§ô®É¶¡
+/// ï¿½ï¿½ï¿½ï¿½É¶ï¿½
 #define SYSTEM_END_TIME 40
 
-/// ¿é¤JtxtÀÉ
+/// ï¿½ï¿½Jtxtï¿½ï¿½
 FILE* fp;
 #define INPUT_FILE_NAME "./TaskSet.txt"
 #define OUTPUT_FILE_NAME "./Output.txt"
 #define APERIODIC_FILE_NAME "./AperiodicJobs.txt"
 #define MAX 20
 #define INFO 4
-/// ¿é¤JtxtÀÉ
+/// ï¿½ï¿½Jtxtï¿½ï¿½
 
-/// ¿é¥XtxtÀÉ
+/// ï¿½ï¿½Xtxtï¿½ï¿½
 FILE* Output_fp;
 errno_t Output_err;
-/// ¿é¥XtxtÀÉ
+/// ï¿½ï¿½Xtxtï¿½ï¿½
 
-/// Task¸ê®Æµ²ºc
+/// Taskï¿½ï¿½Æµï¿½ï¿½c
 typedef struct task_para_set {
     INT16U TaskID;
     INT16U TaskArriveTime;
@@ -98,16 +98,16 @@ typedef struct aperiodic_job_para_set {
     INT16U AbsoluteDeadline;
 } aperiodic_job_para_set;
 
-int TASK_NUMBER; /// input tasks ¼Æ¶q
-int SERVER_ID; /// PA#2¡A«ü©wCUSªºtask ID
+int TASK_NUMBER; /// input tasks ï¿½Æ¶q
+int SERVER_ID; /// PA#2ï¿½Aï¿½ï¿½ï¿½wCUSï¿½ï¿½task ID
 int SERVER_PRIO;
 int SERVER_SIZE;
-/// Task¸ê®Æµ²ºc
+/// Taskï¿½ï¿½Æµï¿½ï¿½c
 
-/// °ÊºA«Å§i stack size
+/// ï¿½ÊºAï¿½Å§i stack size
 OS_STK** Task_STK;
 
-/// «Ø¥ß task
+/// ï¿½Ø¥ï¿½ task
 task_para_set TaskParameter[OS_MAX_TASKS];
 aperiodic_job_para_set AperiodicJobParameter[OS_MAX_TASKS];
 
@@ -1532,7 +1532,7 @@ void          OSStartHighRdy          (void);
 void          OSIntCtxSw              (void);
 void          OSCtxSw                 (void);
 #endif
-void OutFileInit(void); /// «Å§i¨ç¦¡
+void OutFileInit(void); /// ï¿½Å§iï¿½ç¦¡
 void InputFile(void);
 void InputAperiodicFile();
 

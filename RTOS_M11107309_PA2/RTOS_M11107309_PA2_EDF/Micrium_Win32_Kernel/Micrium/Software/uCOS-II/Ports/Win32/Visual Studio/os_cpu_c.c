@@ -697,7 +697,7 @@ void  OSStartHighRdy (void)
                                                                         /* Wait while task is created and until it is ready to run. */
     SignalObjectAndWait(p_stk->SignalPtr, p_stk->InitSignalPtr, INFINITE, FALSE);
     ResumeThread(OSTick_Thread);                                        /* Start OSTick Thread.                                     */
-    WaitForSingleObject(OSTick_Thread, INFINITE);                       /* Wait until OSTick Thread has terminated.                 */ ///¥d¦b³oª½¨ì30¬íµ²§ô
+    WaitForSingleObject(OSTick_Thread, INFINITE);                       /* Wait until OSTick Thread has terminated.                 */ ///ï¿½dï¿½bï¿½oï¿½ï¿½ï¿½ï¿½30ï¿½ï¿½ï¿½ï¿½ï¿½
 
 
 #if (TIMER_METHOD == WIN32_MM_TMR)

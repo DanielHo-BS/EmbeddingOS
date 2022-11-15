@@ -99,12 +99,12 @@ int  main (void)
 
     OSInit();                                                   /* Initialize uC/OS-II                                  */
 
-    /// 初始化輸出txt檔
+    /// initialize Output file
     OutFileInit();
 
-    /// 輸入txt檔，將Task參數讀入TaskParameter[]，TASK_NUMBER = Task數量
+    /// load the input file
     InputFile();
-    /// 建立Task Stack
+    /// initialize Task Stack
     Task_STK = malloc(TASK_NUMBER * sizeof(int*));
     int n;
     for (n = 0;n < TASK_NUMBER;n++) 
@@ -114,7 +114,7 @@ int  main (void)
 
     /// #PA1
     /// RM scheduling rules : task with smallest time period will have highest priority 
-    /// insertion sort by TaskPeriodic => TaskParameter[0]為period最小的Task，升序排列
+    /// insertion sort by TaskPeriodic => TaskParameter[0]嚙踝蕭period嚙諒小嚙踝蕭Task嚙璀嚙褕序排列
     //int i, j, key;
     //task_para_set tmp_TaskParameter;
     //for (j = 1;j < TASK_NUMBER;j++)
@@ -131,18 +131,18 @@ int  main (void)
     //}
     /// #PA1
 
-    /// PA#2，新增3個argument
+    /// PA#2 Add 3 argument
     for (n = 0;n < TASK_NUMBER;n++) 
     {
         /// printf("ID %d, prio %d\n", TaskParameter[n].TaskID, n+1);
         OSTaskCreateExt(task1,                                                  /// task function
-            &TaskParameter[n],                                                  /// p_arg(給task function的參數)
+            &TaskParameter[n],                                                  /// p_arg
             &Task_STK[n][TASK_STACKSIZE - 1],                                   /// ptos
-            n+1,                                                                /// prio, PA#1要求從1開始
+            n+1,                                                                /// prio, PA#1 start from 1 
             TaskParameter[n].TaskID,                                            /// id
             &Task_STK[n][0],                                                    /// pbos
             TASK_STACKSIZE,                                                     /// stack size
-            &TaskParameter[n],                                                  /// pext(TCB extentsion的pointer)
+            &TaskParameter[n],                                                  /// pext(TCB extentsion's pointer)
             (OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR),                        /// opt
             TaskParameter[n].TaskArriveTime,                                        /// arrive_time
             TaskParameter[n].TaskExecutionTime,                                     /// exe_time

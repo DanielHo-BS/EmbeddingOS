@@ -924,7 +924,7 @@ void  OSStatInit (void)
 #endif
 
 
-/// PA#2，For EDF，看過OSRdyTbl一遍，檢查是否有miss deadline，有則retrun miss deadline的prio，無則return-1
+/// PA#2 For EDF, in OSRdyTbl check if the task miss deadline and return miss deadline's prio (not, return-1)
 int check_deadline()
 {
     int miss_deadline_prio = -1;
@@ -933,7 +933,7 @@ int check_deadline()
         int row = prio / 8;
         int col_mask = 0b1 << (prio % 8);
 
-        if ((OSRdyTbl[row] & col_mask) != 0)  // 如果某個task是ready的
+        if ((OSRdyTbl[row] & col_mask) != 0)  // check if the task is ready. 
         {
             if (OSTCBPrioTbl[prio]->deadline <= OSTimeGet())
             {
@@ -957,22 +957,22 @@ int check_deadline()
 * Returns    : none
 *********************************************************************************************************
 */
-/// PA#1，紀錄每個task已執行幾次
+/// PA#1 Counter the number of job finished.
 int job_number[64] = { 0 };
 
-/// PA#1，用於確認OSRdyTbl中的某個priority是否為1
+/// PA#1 To check the OSRdyTbl priority
 INT8U OSMapTbl[8] = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80 };
 
-/// PA#1，用於計算各個Task的response time、紀錄被preempt的次數、時間(# of ContextSwitch, PreemptionTime)
-int task_start_time[64] = { 0 };  /// 在OSTimeDly()把task設為ready時紀錄
+/// PA#1 For calculation: "response time", "# of ContextSwitch" and "PreemptionTime"
+int task_start_time[64] = { 0 };  
 int task_preempt_count[64] = { 0 };
 int task_preempt_time[64] = { 0 };
 int task_preempt_time_acc[64] = { 0 };
 
 /// PA#2
-int miss_deadline_prio = -1;  // 用於紀錄miss deadline的prio，無則為-1
-int response_time = -1;  // 在OSTimeTick()紀錄response time，在OS_SchedNew print出
-int missed_deadline = 0;  // 紀錄是否有miss deadline的紀錄，判斷是否要省略OS_SchedNew print complete的資訊
+int miss_deadline_prio = -1;  // set the task's priority which miss deadline = -1
+int response_time = -1;  // set the task's response time which miss deadline = -1
+int missed_deadline = 0;  // reset the miss deadline's state
 
 void  OSTimeTick (void)
 {
@@ -997,12 +997,11 @@ void  OSTimeTick (void)
 #endif
     if (OSRunning == OS_TRUE) {
 
-        /// 設定OS時間到即結束
         if (OSTimeGet() > SYSTEM_END_TIME) {
             OSRunning = OS_FALSE;
             exit(0);
         }
-        /// 設定OS時間到即結束
+       
 #if OS_TICK_STEP_EN > 0u
         switch (OSTickStepState) {                         /* Determine whether we need to process a tick  */
             case OS_TICK_STEP_DIS:                         /* Yes, stepping is disabled                    */
@@ -1046,7 +1045,7 @@ void  OSTimeTick (void)
                         OSRdyTbl[ptcb->OSTCBY] |= ptcb->OSTCBBitX;
 
                         /// PA#1
-                        task_start_time[ptcb->OSTCBPrio] = OSTimeGet();  // 紀錄這個job ready時間，用於計算response time
+                        task_start_time[ptcb->OSTCBPrio] = OSTimeGet();  // 嚙踝蕭嚙踝蕭嚙緻嚙踝蕭job ready嚙褕塚蕭嚙璀嚙諄抬蕭p嚙踝蕭response time
                         /// PA#1
 
                         OS_TRACE_TASK_READY(ptcb);
@@ -1058,7 +1057,7 @@ void  OSTimeTick (void)
             OS_EXIT_CRITICAL();
         }
 
-        /// PA#2，把remain_exe_time處理改到OSTimeTick()處理
+        /// PA#2 calculate task's remain_exe_time in OSTimeTick()
         if (OSTCBCur->remain_exe_time > 0)  
         {
             OSTCBCur->remain_exe_time--;
@@ -1068,11 +1067,11 @@ void  OSTimeTick (void)
             {
                 response_time = OSTimeGet() - task_start_time[OSTCBCur->OSTCBPrio];
 
-                task_start_time[OSTCBCur->OSTCBPrio] = OSTimeGet();  // 紀錄這個job ready時間，用於計算response time
+                task_start_time[OSTCBCur->OSTCBPrio] = OSTimeGet();  // save the ready time to calculate response time
 
-                OSTCBCur->arrive_time = OSTCBCur->arrive_time + OSTCBCur->period;  // 設下個job開始時間
-                OSTCBCur->deadline = OSTCBCur->arrive_time + OSTCBCur->period;  // 設下個job的deadline
-                OSTCBCur->remain_exe_time = OSTCBCur->exe_time;  // 重設剩餘執行時間
+                OSTCBCur->arrive_time = OSTCBCur->arrive_time + OSTCBCur->period;  // reset the next start time
+                OSTCBCur->deadline = OSTCBCur->arrive_time + OSTCBCur->period;  // reset the next deadline
+                OSTCBCur->remain_exe_time = OSTCBCur->exe_time;  // reset the remain_exe_time
 
                 INT8U delay_ticks = OSTCBCur->arrive_time - OSTimeGet();
                 if (delay_ticks > 0u) {                /* 0 means no delay!                                  */
@@ -1117,11 +1116,11 @@ void  OSTimeTick (void)
                 OSTCBPrioTbl[miss_deadline_prio]->OSTCBId, job_number[miss_deadline_prio], OSTimeGet(), OSTCBPrioTbl[miss_deadline_prio]->remain_exe_time);
             fclose(Output_fp);
 
-            task_start_time[miss_deadline_prio] = OSTimeGet();  // 紀錄這個job ready時間，用於計算response time
+            task_start_time[miss_deadline_prio] = OSTimeGet();  // save the ready tiem to calculate response time
 
-            OSTCBPrioTbl[miss_deadline_prio]->arrive_time = OSTimeGet();  // 重設job開始時間
-            OSTCBPrioTbl[miss_deadline_prio]->deadline = OSTimeGet() + OSTCBPrioTbl[miss_deadline_prio]->period;  // 重設job的deadline
-            OSTCBPrioTbl[miss_deadline_prio]->remain_exe_time = OSTCBPrioTbl[miss_deadline_prio]->exe_time;  // 重設剩餘執行時間      
+            OSTCBPrioTbl[miss_deadline_prio]->arrive_time = OSTimeGet();  // reset task's start time
+            OSTCBPrioTbl[miss_deadline_prio]->deadline = OSTimeGet() + OSTCBPrioTbl[miss_deadline_prio]->period;  // reset task's deadline
+            OSTCBPrioTbl[miss_deadline_prio]->remain_exe_time = OSTCBPrioTbl[miss_deadline_prio]->exe_time;  // reset task's exe_time
 
             missed_deadline = 1;
             miss_deadline_prio = check_deadline();
@@ -1858,14 +1857,14 @@ void  OS_Sched (void)
 #endif
 #endif
 
-                OS_TASK_SW();                          /* Perform a context switch                     */  /// OSPrioCur在這裡改變
+                OS_TASK_SW();                          /* Perform a context switch                     */
             }
         }
     }
     OS_EXIT_CRITICAL();
 }
 
-/// PA#2，For EDF，看過OSRdyTbl一遍，找出deadline最近的task的prio
+/// PA#2 For EDF, find the task's priority which has the closest deadline from OSRdyTbl. 
 int find_ED_prio()
 {
     int ED_prio = OS_LOWEST_PRIO;
@@ -1875,10 +1874,10 @@ int find_ED_prio()
         int row = prio / 8;
         int col_mask = 0b1 << (prio%8);
 
-        if ((OSRdyTbl[row] & col_mask) != 0)  // 如果某個task是ready的
+        if ((OSRdyTbl[row] & col_mask) != 0)  // if the task is ready
         {
             // printf("OSTCBPrioTbl[%d]->deadline  = %d \n", prio, OSTCBPrioTbl[prio]->deadline);
-            if (OSTCBPrioTbl[prio]->deadline < ED)  // 如果這個task的deadline是目前看到最小的
+            if (OSTCBPrioTbl[prio]->deadline < ED)  // check the deadline if it is the closest.
             {
                 ED_prio = prio;
                 ED = OSTCBPrioTbl[prio]->deadline;
@@ -1907,16 +1906,20 @@ int find_ED_prio()
 static  void  OS_SchedNew (void)
 {
 #if OS_LOWEST_PRIO <= 63u                        /* See if we support up to 64 tasks                   */
+    /// PA#1
     /// =====================================RMS=====================================
     //INT8U   y;
     //y             = OSUnMapTbl[OSRdyGrp];
     //OSPrioHighRdy = (INT8U)((y << 3u) + OSUnMapTbl[OSRdyTbl[y]]);
     /// =====================================RMS=====================================
-
+    /// PA#1
+    
+    /// PA#2
     /// =====================================EDF=====================================
     OSPrioHighRdy = find_ED_prio();
     // printf("%2d : OSPrioHighRdy = %d \n", OSTimeGet(), OSPrioHighRdy);
     /// =====================================EDF=====================================
+    /// PA#2
     
     /// PA#1
     if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) != 0)
@@ -1925,12 +1928,12 @@ static  void  OS_SchedNew (void)
         exit(0);
     }
 
-    /// Task變了 => completed or preempted。
+    /// Task's state => completed or preempted
     if (OSPrioCur != OSPrioHighRdy)
     {
         if (OSTCBPrioTbl[OSPrioCur] == NULL)
         {
-            // 避免初始狀態OSPrioCur = 0，OSTCBPrioTbl[OSPrioCur] = NULL
+            // Skip the init state(OSPrioCur = 0), TCBPrioTbl[OSPrioCur] = NULL
         }
         else if (missed_deadline == 1)
         {
@@ -1938,15 +1941,15 @@ static  void  OS_SchedNew (void)
         }
         else
         {
-            /// =======================================一般Completion=======================================
+            /// =======================================Completion=======================================
             printf("%2d\t", OSTimeGet());
             fprintf(Output_fp, "%2d\t", OSTimeGet());
-            if (OSTCBPrioTbl[OSPrioCur]->remain_exe_time == OSTCBPrioTbl[OSPrioCur]->exe_time)  /// 表示原本的Task已完成，進入等待狀態
+            if (OSTCBPrioTbl[OSPrioCur]->remain_exe_time == OSTCBPrioTbl[OSPrioCur]->exe_time)  /// the task is finished and ready
             {
                 printf("Completion\t ");
                 fprintf(Output_fp, "Completion\t ");
                 /// CurrentTask
-                if (OSPrioCur == 63)  /// 其實不會發生這種情況
+                if (OSPrioCur == 63)  /// it don't happen
                 {
                     printf("task(%2d)    \t", OSPrioCur);
                     fprintf(Output_fp, "task(%2d)    \t", OSPrioCur);
@@ -1993,19 +1996,19 @@ static  void  OS_SchedNew (void)
                 task_preempt_count[OSPrioCur] = 0;
                 task_preempt_time_acc[OSPrioCur] = 0;
 
-                if (task_preempt_time[OSPrioHighRdy] != 0)  /// 有被preempt的紀錄
+                if (task_preempt_time[OSPrioHighRdy] != 0)  /// check next task if it is preempted.
                 {
                     task_preempt_time_acc[OSPrioHighRdy] = task_preempt_time_acc[OSPrioHighRdy] + (OSTimeGet() - task_preempt_time[OSPrioHighRdy]);
                 }
 
-                task_preempt_count[OSPrioHighRdy]++;  /// 換過去第一次也算，才會符合PA#1範例
+                task_preempt_count[OSPrioHighRdy]++;  
 
                 job_number[OSPrioCur]++;
             }
-            /// =======================================一般Completion=======================================
+            /// =======================================Completion=======================================
 
-            /// =======================================一般Preemption=======================================
-            else  /// 表示原本的Task尚未完成，preempt
+            /// =======================================Preemption=======================================
+            else  /// task is preempted
             {
 
                 printf("Preemption\t ");
@@ -2033,14 +2036,14 @@ static  void  OS_SchedNew (void)
                     fprintf(Output_fp, " task(%2d)(%2d)\n", OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, job_number[OSPrioHighRdy]);
                 }
 
-                task_preempt_time[OSPrioCur] = OSTimeGet();   /// 記錄何時被preempt     
+                task_preempt_time[OSPrioCur] = OSTimeGet();   /// save the preemptTime    
                 task_preempt_count[OSPrioCur]++;
 
-                /// task_preempt_time[OSPrioHighRdy] 不動
+                /// task_preempt_time[OSPrioHighRdy] 
                 task_preempt_count[OSPrioHighRdy]++;
 
             }
-            /// =======================================一般Preemption=======================================
+            /// =======================================Preemption=======================================
         }
     }
     fclose(Output_fp);
@@ -2421,12 +2424,12 @@ INT8U  OS_TCBInit (INT8U    prio,
         /// PA#1 part1
         //printf("Task[%3.0d] created, TCB Address %9.0p\n", ptcb->OSTCBPrio, ptcb);
         //printf("------After TCB[%d] being linked------\n", ptcb->OSTCBPrio);
-        //printf("Previous TCB pint to address %9.0p\n", ptcb->OSTCBPrev);   /// (OS_TCB *)0為pointer type，用%p
+        //printf("Previous TCB pint to address %9.0p\n", ptcb->OSTCBPrev);   /// (OS_TCB *)0嚙踝蕭pointer type嚙璀嚙踝蕭%p
         //printf("Current  TCB pint to address %9.0p\n", ptcb);
         //printf("Next     TCB pint to address %9.0p\n\n", ptcb->OSTCBNext);
         /// PA#1 part1
 
-        /// PA#2 初始化額外TCB變數
+        /// PA#2 initialize the TCB variables which are new.
         if (id == OS_TASK_IDLE_ID)
         {
             ptcb->arrive_time = 0;
@@ -2444,7 +2447,7 @@ INT8U  OS_TCBInit (INT8U    prio,
             ptcb->remain_exe_time = exe_time;
         }
 
-        /// PA#2 如果arrive time == 0，設為ready；反之設定OSTCBDly = arrive_time
+        /// PA#2 if arrive time == 0, set ready; not, set OSTCBDly = arrive_time
         if (arrive_time == 0)
         {
             OSRdyGrp |= ptcb->OSTCBBitY;         /* Make task ready to run                   */

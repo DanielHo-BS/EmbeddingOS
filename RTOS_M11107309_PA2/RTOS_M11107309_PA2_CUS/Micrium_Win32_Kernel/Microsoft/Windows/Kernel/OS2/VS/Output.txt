@@ -1,30 +1,23 @@
- 1	Completion	Task( 1)( 0)	Task( 2)( 0)	    1		    1			    0
- 4	Aperiodic job(0) arrives and sets CUS server's deadline as 14.
- 4	Preemption	Task( 2)( 0)	Task( 1)( 1)
- 5	Completion	Task( 1)( 1)	Task( 2)( 0)	    1		    2			    0
- 6	Completion	Task( 2)( 0)	Task( 3)( 0)	    6		    4			    1
- 8	Preemption	Task( 3)( 0)	Task( 1)( 2)
- 9	Completion	Task( 1)( 2)	Task( 3)( 0)	    1		    2			    0
-10	Aperiodic job(0) is finished.
-10	Completion	Task( 3)( 0)	Task( 2)( 1)	    6		    4			    1
-12	Preemption	Task( 2)( 1)	Task( 1)( 3)
-13	Completion	Task( 1)( 3)	Task( 2)( 1)	    1		    2			    0
-15	Completion	Task( 2)( 1)	Task(63)	    5		    4			    1
-16	Preemption	Task(63)	Task( 1)( 4)
-17	Aperiodic job(1) arrives and sets CUS server's deadline as 27.
-17	Completion	Task( 1)( 4)	Task( 3)( 1)	    1		    2			    0
-20	Aperiodic job(1) is finished.
-20	Completion	Task( 3)( 1)	Task( 1)( 5)	    3		    2			    0
-21	Completion	Task( 1)( 5)	Task( 2)( 2)	    1		    2			    0
-24	Preemption	Task( 2)( 2)	Task( 1)( 6)
-25	Completion	Task( 1)( 6)	Task( 2)( 2)	    1		    2			    0
-26	Completion	Task( 2)( 2)	Task(63)	    6		    4			    1
-28	Preemption	Task(63)	Task( 1)( 7)
-29	Completion	Task( 1)( 7)	Task(63)	    1		    2			    0
-30	Preemption	Task(63)	Task( 2)( 3)
-32	Preemption	Task( 2)( 3)	Task( 1)( 8)
-33	Completion	Task( 1)( 8)	Task( 2)( 3)	    1		    2			    0
-35	Completion	Task( 2)( 3)	Task(63)	    5		    4			    1
-36	Preemption	Task(63)	Task( 1)( 9)
-37	Completion	Task( 1)( 9)	Task(63)	    1		    2			    0
-40	Preemption	Task(63)	Task( 1)(10)
+ 2	Completion	Task( 1)( 0)	Task( 2)( 0)	    2		    1			    0
+ 5	Completion	Task( 2)( 0)	Task( 3)( 0)	    5		    2			    0
+ 9	Completion	Task( 3)( 0)	Task( 1)( 1)	    9		    2			    0
+11	Completion	Task( 1)( 1)	Task( 2)( 1)	    3		    2			    0
+12	Aperiodic job(0) arrives and sets CUS server's deadline as 24.
+14	Aperiodic job(1) arrives. Do nothing.
+14	Completion	Task( 2)( 1)	Task( 4)( 0)	    4		    2			    0
+16	Preemption	Task( 4)( 0)	Task( 1)( 2)
+18	Completion	Task( 1)( 2)	Task( 4)( 0)	    2		    2			    0
+19	Aperiodic job(0) is finished.
+19	Completion	Task( 4)( 0)	Task( 3)( 1)	    7		    4			    2
+20	Preemption	Task( 3)( 1)	Task( 2)( 2)
+23	Completion	Task( 2)( 2)	Task( 3)( 1)	    3		    2			    0
+24	Aperiodic job(1) sets CUS server's deadline as 32.
+26	Completion	Task( 3)( 1)	Task( 1)( 3)	   11		    4			    3
+28	Completion	Task( 1)( 3)	Task( 4)( 1)	    4		    2			    0
+30	Aperiodic job(1) is finished.
+30	Completion	Task( 4)( 1)	Task( 2)( 3)	   16		    2			    0
+32	Preemption	Task( 2)( 3)	Task( 1)( 4)
+34	Completion	Task( 1)( 4)	Task( 2)( 3)	    2		    2			    0
+35	Completion	Task( 2)( 3)	Task( 3)( 2)	    5		    4			    2
+39	Completion	Task( 3)( 2)	Task(63)	    9		    2			    0
+40	Preemption	Task(63)	Task( 1)( 5)

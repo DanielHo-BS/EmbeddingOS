@@ -935,24 +935,24 @@ void  OSStatInit (void)
 * Returns    : none
 *********************************************************************************************************
 */
-/// PA#1¡A¬ö¿ý¨C­Ótask¤w°õ¦æ´X¦¸
+/// PA#1ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½Cï¿½ï¿½taskï¿½wï¿½ï¿½ï¿½ï¿½Xï¿½ï¿½
 int job_number[64] = { 0 };
 
-/// PA#1¡A¥Î©ó½T»{OSRdyTbl¤¤ªº¬Y­Ópriority¬O§_¬°1
+/// PA#1ï¿½Aï¿½Î©ï¿½Tï¿½{OSRdyTblï¿½ï¿½ï¿½ï¿½ï¿½Yï¿½ï¿½priorityï¿½Oï¿½_ï¿½ï¿½1
 INT8U OSMapTbl[8] = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80 };
 
-/// PA#1¡A¥Î©ó­pºâ¦U­ÓTaskªºresponse time¡B¬ö¿ý³Qpreemptªº¦¸¼Æ¡B®É¶¡(# of ContextSwitch, PreemptionTime)
-int task_start_time[64] = { 0 };  /// ¬ö¿ýtask readyªº®É¶¡¡A¦b§¹¦¨®É¥Î¨Ó­pºâresponse time
-int response_time = 0;  /// ¦¹¦¸§¹¦¨ªºtask¤§response time
+/// PA#1ï¿½Aï¿½Î©ï¿½pï¿½ï¿½Uï¿½ï¿½Taskï¿½ï¿½response timeï¿½Bï¿½ï¿½ï¿½ï¿½ï¿½Qpreemptï¿½ï¿½ï¿½ï¿½ï¿½Æ¡Bï¿½É¶ï¿½(# of ContextSwitch, PreemptionTime)
+int task_start_time[64] = { 0 };  /// ï¿½ï¿½ï¿½ï¿½task readyï¿½ï¿½ï¿½É¶ï¿½ï¿½Aï¿½bï¿½ï¿½ï¿½ï¿½ï¿½É¥Î¨Ó­pï¿½ï¿½response time
+int response_time = 0;  /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½taskï¿½ï¿½response time
 int task_preempt_count[64] = { 0 };
 int task_preempt_time[64] = { 0 };
 int task_preempt_time_acc[64] = { 0 };
 
-/// PA#2¡A¥Î©ó¬ö¿ýmiss deadlineªºprio¡AµL«h¬°-1
+/// PA#2ï¿½Aï¿½Î©ï¿½ï¿½ï¿½ï¿½miss deadlineï¿½ï¿½prioï¿½Aï¿½Lï¿½hï¿½ï¿½-1
 int miss_deadline_prio = -1;
-int aperiodic_job_start_time[OS_MAX_TASKS] = { 0 };  /// ¬ö¿ýjob arriveªº®É¶¡¡A¦b§¹¦¨®É¥Î¨Ó­pºâresponse time
+int aperiodic_job_start_time[OS_MAX_TASKS] = { 0 };  /// ï¿½ï¿½ï¿½ï¿½job arriveï¿½ï¿½ï¿½É¶ï¿½ï¿½Aï¿½bï¿½ï¿½ï¿½ï¿½ï¿½É¥Î¨Ó­pï¿½ï¿½response time
 
-/// PA#2¡AFor EDF¡A¬Ý¹LOSRdyTbl¤@¹M¡AÀË¬d¬O§_¦³miss deadline¡A¦³«hretrun miss deadlineªºprio¡AµL«hreturn-1
+/// PA#2ï¿½AFor EDFï¿½Aï¿½Ý¹LOSRdyTblï¿½@ï¿½Mï¿½Aï¿½Ë¬dï¿½Oï¿½_ï¿½ï¿½miss deadlineï¿½Aï¿½ï¿½ï¿½hretrun miss deadlineï¿½ï¿½prioï¿½Aï¿½Lï¿½hreturn-1
 int check_deadline()
 {
     int miss_deadline_prio = -1;
@@ -961,7 +961,7 @@ int check_deadline()
         int row = prio / 8;
         int col_mask = 0b1 << (prio % 8);
 
-        if ((OSRdyTbl[row] & col_mask) != 0)  // ¦pªG¬Y­Ótask¬Oreadyªº
+        if ((OSRdyTbl[row] & col_mask) != 0)  // ï¿½pï¿½Gï¿½Yï¿½ï¿½taskï¿½Oreadyï¿½ï¿½
         {
             if (OSTCBPrioTbl[prio]->deadline <= OSTimeGet())
             {
@@ -973,12 +973,12 @@ int check_deadline()
     return miss_deadline_prio;
 }
 
-int job_index_queue[OS_MAX_TASKS] = { -1 };  // ¬ö¿ýserver­n¥h°õ¦æªºjob¡A¨ä¦bAperiodicJobParameterªºindex
-int front = -1;  // «ü¦Vqueueªº³Ì«á¤@­Ójob -1ªº¦ì¸m
-int tail = -1;  // «ü¦Vqueueªº³Ì«á¤@­Ójob
+int job_index_queue[OS_MAX_TASKS] = { -1 };  // ï¿½ï¿½ï¿½ï¿½serverï¿½nï¿½hï¿½ï¿½ï¿½æªºjobï¿½Aï¿½ï¿½bAperiodicJobParameterï¿½ï¿½index
+int front = -1;  // ï¿½ï¿½ï¿½Vqueueï¿½ï¿½ï¿½Ì«ï¿½@ï¿½ï¿½job -1ï¿½ï¿½ï¿½ï¿½m
+int tail = -1;  // ï¿½ï¿½ï¿½Vqueueï¿½ï¿½ï¿½Ì«ï¿½@ï¿½ï¿½job
 int current_job_id = -1;
 
-/// PA#2¡AFor CUS¡A¬Ý¹LAperiodicJobParameter¤@¹M¡AÀË¬d¬O§_¦³aperiodic job­n¶}©l
+/// PA#2ï¿½AFor CUSï¿½Aï¿½Ý¹LAperiodicJobParameterï¿½@ï¿½Mï¿½Aï¿½Ë¬dï¿½Oï¿½_ï¿½ï¿½aperiodic jobï¿½nï¿½}ï¿½l
 void enqueue_aperiodic_job()
 {
     for (int i = 0; i < OS_MAX_TASKS; i++)
@@ -1019,12 +1019,12 @@ void  OSTimeTick (void)
 #endif
     if (OSRunning == OS_TRUE) {
 
-        /// ³]©wOS®É¶¡¨ì§Yµ²§ô
+        /// ï¿½]ï¿½wOSï¿½É¶ï¿½ï¿½ï¿½Yï¿½ï¿½ï¿½ï¿½
         if (OSTimeGet() > SYSTEM_END_TIME) {
             OSRunning = OS_FALSE;
             exit(0);
         }
-        /// ³]©wOS®É¶¡¨ì§Yµ²§ô
+        /// ï¿½]ï¿½wOSï¿½É¶ï¿½ï¿½ï¿½Yï¿½ï¿½ï¿½ï¿½
 #if OS_TICK_STEP_EN > 0u
         switch (OSTickStepState) {                         /* Determine whether we need to process a tick  */
             case OS_TICK_STEP_DIS:                         /* Yes, stepping is disabled                    */
@@ -1068,7 +1068,7 @@ void  OSTimeTick (void)
                         OSRdyTbl[ptcb->OSTCBY] |= ptcb->OSTCBBitX;
 
                         /// PA#1
-                        // task_start_time[ptcb->OSTCBPrio] = OSTimeGet();  // ¬ö¿ý³o­Ójob ready®É¶¡¡A¥Î©ó­pºâresponse time
+                        // task_start_time[ptcb->OSTCBPrio] = OSTimeGet();  // ï¿½ï¿½ï¿½ï¿½ï¿½oï¿½ï¿½job readyï¿½É¶ï¿½ï¿½Aï¿½Î©ï¿½pï¿½ï¿½response time
                         /// PA#1
 
                         OS_TRACE_TASK_READY(ptcb);
@@ -1080,7 +1080,7 @@ void  OSTimeTick (void)
             OS_EXIT_CRITICAL();
         }
 
-        /// PA#2¡A§âremain_exe_time³B²z§ï¨ìOSTimeTick()³B²z
+        /// PA#2ï¿½Aï¿½ï¿½remain_exe_timeï¿½Bï¿½zï¿½ï¿½ï¿½OSTimeTick()ï¿½Bï¿½z
         if (OSTCBCur->remain_exe_time > 0)  
         {
             OSTCBCur->remain_exe_time--;
@@ -1113,11 +1113,11 @@ void  OSTimeTick (void)
                 }
                 else
                 {
-                    task_start_time[OSTCBCur->OSTCBPrio] += OSTCBCur->period;  // ¬ö¿ý¤U­Ójob ready®É¶¡¡A¥Î©ó­pºâresponse time
+                    task_start_time[OSTCBCur->OSTCBPrio] += OSTCBCur->period;  // ï¿½ï¿½ï¿½ï¿½ï¿½Uï¿½ï¿½job readyï¿½É¶ï¿½ï¿½Aï¿½Î©ï¿½pï¿½ï¿½response time
 
-                    OSTCBCur->arrive_time = OSTCBCur->arrive_time + OSTCBCur->period;  // ³]¤U­Ójob¶}©l®É¶¡
-                    OSTCBCur->deadline = OSTCBCur->arrive_time + OSTCBCur->period;  // ³]¤U­Ójobªºdeadline
-                    OSTCBCur->remain_exe_time = OSTCBCur->exe_time;  // ­«³]³Ñ¾l°õ¦æ®É¶¡
+                    OSTCBCur->arrive_time = OSTCBCur->arrive_time + OSTCBCur->period;  // ï¿½]ï¿½Uï¿½ï¿½jobï¿½}ï¿½lï¿½É¶ï¿½
+                    OSTCBCur->deadline = OSTCBCur->arrive_time + OSTCBCur->period;  // ï¿½]ï¿½Uï¿½ï¿½jobï¿½ï¿½deadline
+                    OSTCBCur->remain_exe_time = OSTCBCur->exe_time;  // ï¿½ï¿½ï¿½]ï¿½Ñ¾lï¿½ï¿½ï¿½ï¿½É¶ï¿½
                 }
                 INT8U delay_ticks = OSTCBCur->arrive_time - OSTimeGet();
                 if (delay_ticks > 0u) {                /* 0 means no delay!                                  */
@@ -1134,7 +1134,7 @@ void  OSTimeTick (void)
 
         /// =======================================miss deadline=======================================
         miss_deadline_prio = check_deadline();    
-        if (miss_deadline_prio != -1)  // ¦bOSTimeTick()ÀË¬d¹L
+        if (miss_deadline_prio != -1)  // ï¿½bOSTimeTick()ï¿½Ë¬dï¿½L
         {
             if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) != 0)
             {
@@ -1159,7 +1159,7 @@ void  OSTimeTick (void)
         /// ======================================= CUS =======================================
         enqueue_aperiodic_job();
         ptcb = OSTCBPrioTbl[SERVER_PRIO];
-        if (front != tail && (OSTimeGet() >= ptcb->deadline || ptcb->arrive_time == 0))  // queue¸Ì¦³job«Ý°õ¦æ¡A¥B¥Ø«eCUS¬°ªÅ¶¢(OSTimeGet() > server deadline or ªì©lª¬ºA)
+        if (front != tail && (OSTimeGet() >= ptcb->deadline || ptcb->arrive_time == 0))  // queueï¿½Ì¦ï¿½jobï¿½Ý°ï¿½ï¿½ï¿½Aï¿½Bï¿½Ø«eCUSï¿½ï¿½ï¿½Å¶ï¿½(OSTimeGet() > server deadline or ï¿½ï¿½lï¿½ï¿½ï¿½A)
         {
             if ((ptcb->OSTCBStat & OS_STAT_SUSPEND) == OS_STAT_RDY) {  /* Is task suspended?       */
                 OSRdyGrp |= ptcb->OSTCBBitY;             /* No,  Make ready          */
@@ -1171,7 +1171,7 @@ void  OSTimeTick (void)
             ptcb->remain_exe_time = AperiodicJobParameter[job_index_queue[front + 1]].TaskExecutionTime;
             current_job_id = AperiodicJobParameter[job_index_queue[front + 1]].TaskID;
 
-            if (AperiodicJobParameter[job_index_queue[front + 1]].TaskArriveTime == OSTimeGet())  // arrive®É¡A­è¦nCUS¥i¥Hª½±µ¶}©l
+            if (AperiodicJobParameter[job_index_queue[front + 1]].TaskArriveTime == OSTimeGet())  // arriveï¿½É¡Aï¿½ï¿½nCUSï¿½iï¿½Hï¿½ï¿½ï¿½ï¿½ï¿½}ï¿½l
             {
                 if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) != 0)
                 {
@@ -1184,7 +1184,7 @@ void  OSTimeTick (void)
                 fprintf(Output_fp, "Aperiodic job(%d) arrives and sets CUS server's deadline as %d.\n", current_job_id, ptcb->deadline);
                 fclose(Output_fp);
             }
-            else  // job¥ýµ¥«Ý¤F«e¤@­ÓCUS deadline¡A¤§«á¤~¶}©l
+            else  // jobï¿½ï¿½ï¿½ï¿½ï¿½Ý¤Fï¿½eï¿½@ï¿½ï¿½CUS deadlineï¿½Aï¿½ï¿½ï¿½ï¿½~ï¿½}ï¿½l
             {
                 if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) != 0)
                 {
@@ -1197,13 +1197,13 @@ void  OSTimeTick (void)
                 fprintf(Output_fp, "Aperiodic job(%d) sets CUS server's deadline as %d.\n", current_job_id, ptcb->deadline);
                 fclose(Output_fp);     
             }
-            dequeue_aperiodic_job();  // ÅýCUS¶}©l°õ¦æ¡A´N¥ý²¾¥Xqueue
+            dequeue_aperiodic_job();  // ï¿½ï¿½CUSï¿½}ï¿½lï¿½ï¿½ï¿½ï¿½Aï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½Xqueue
         }
-        else if (front != tail && OSTimeGet() < ptcb->deadline)  // queue¸Ì¦³job«Ý°õ¦æ¡A¥BÁÙ¨S¨ìCUS deadline
+        else if (front != tail && OSTimeGet() < ptcb->deadline)  // queueï¿½Ì¦ï¿½jobï¿½Ý°ï¿½ï¿½ï¿½Aï¿½Bï¿½Ù¨Sï¿½ï¿½CUS deadline
         {
             for (int i = front+1; i <= tail; i++)
             {
-                if (AperiodicJobParameter[job_index_queue[front + 1]].TaskArriveTime == OSTimeGet())  // ÁÙ¨S³QCUS°õ¦æªºjob·|¤@ª½¦bqueueµ¥«Ý¡A¦ý¥u»Ý¦barrive®Éprint¤@¦¸
+                if (AperiodicJobParameter[job_index_queue[front + 1]].TaskArriveTime == OSTimeGet())  // ï¿½Ù¨Sï¿½QCUSï¿½ï¿½ï¿½æªºjobï¿½|ï¿½@ï¿½ï¿½ï¿½bqueueï¿½ï¿½ï¿½Ý¡Aï¿½ï¿½ï¿½uï¿½Ý¦barriveï¿½ï¿½printï¿½@ï¿½ï¿½
                 {
                     if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) != 0)
                     {
@@ -1950,14 +1950,14 @@ void  OS_Sched (void)
 #endif
 #endif
 
-                OS_TASK_SW();                          /* Perform a context switch                     */  /// OSPrioCur¦b³o¸Ì§ïÅÜ
+                OS_TASK_SW();                          /* Perform a context switch                     */  /// OSPrioCurï¿½bï¿½oï¿½Ì§ï¿½ï¿½ï¿½
             }
         }
     }
     OS_EXIT_CRITICAL();
 }
 
-/// PA#2¡AFor EDF¡A¬Ý¹LOSRdyTbl¤@¹M¡A§ä¥Xdeadline³Ìªñªºtaskªºprio
+/// PA#2ï¿½AFor EDFï¿½Aï¿½Ý¹LOSRdyTblï¿½@ï¿½Mï¿½Aï¿½ï¿½Xdeadlineï¿½Ìªï¿½taskï¿½ï¿½prio
 int find_ED_prio()
 {
     int ED_prio = OS_LOWEST_PRIO;
@@ -1967,10 +1967,10 @@ int find_ED_prio()
         int row = prio / 8;
         int col_mask = 0b1 << (prio%8);
 
-        if ((OSRdyTbl[row] & col_mask) != 0)  // ¦pªG¬Y­Ótask¬Oreadyªº
+        if ((OSRdyTbl[row] & col_mask) != 0)  // ï¿½pï¿½Gï¿½Yï¿½ï¿½taskï¿½Oreadyï¿½ï¿½
         {
             // printf("OSTCBPrioTbl[%d]->deadline  = %d \n", prio, OSTCBPrioTbl[prio]->deadline);
-            if (OSTCBPrioTbl[prio]->deadline < ED)  // ¦pªG³o­Ótaskªºdeadline¬O¥Ø«e¬Ý¨ì³Ì¤pªº
+            if (OSTCBPrioTbl[prio]->deadline < ED)  // ï¿½pï¿½Gï¿½oï¿½ï¿½taskï¿½ï¿½deadlineï¿½Oï¿½Ø«eï¿½Ý¨ï¿½Ì¤pï¿½ï¿½
             {
                 ED_prio = prio;
                 ED = OSTCBPrioTbl[prio]->deadline;
@@ -1994,7 +1994,7 @@ int find_ED_prio()
 *              2) Interrupts are assumed to be disabled when this function is called.
 *********************************************************************************************************
 */
-/// PA#1¡A±±¨î¿é¥X²Ä¤@¦C
+/// PA#1ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½Ä¤@ï¿½C
 int first_line = 1;
 static  void  OS_SchedNew (void)
 {
@@ -2017,13 +2017,13 @@ static  void  OS_SchedNew (void)
         exit(0);
     }
 
-    if (first_line == 1)  /// PA#1¡A¿é¥X²Ä¤@¦C 
+    if (first_line == 1)  /// PA#1ï¿½Aï¿½ï¿½Xï¿½Ä¤@ï¿½C 
     {
         printf("\nTick\tEvent\t\tCurrentTask ID\tNextTask ID\tResponseTime\t# of ContextSwitch\tPreemptionTime\n");
         first_line = 0;
     }
 
-    /// TaskÅÜ¤F => completed or preempted¡C
+    /// Taskï¿½Ü¤F => completed or preemptedï¿½C
     if (OSPrioCur != OSPrioHighRdy)
     {
         if (OSPrioCur == 0)
@@ -2035,13 +2035,13 @@ static  void  OS_SchedNew (void)
             printf("%2d\t", OSTimeGet());
             fprintf(Output_fp, "%2d\t", OSTimeGet());
 
-            /// =======================================¤@¯ëCompletion=======================================
-            if(OSTCBPrioTbl[OSPrioCur]->remain_exe_time == OSTCBPrioTbl[OSPrioCur]->exe_time)  /// ªí¥Ü­ì¥»ªºTask¤w§¹¦¨¡A¶i¤Jµ¥«Ýª¬ºA
+            /// =======================================ï¿½@ï¿½ï¿½Completion=======================================
+            if(OSTCBPrioTbl[OSPrioCur]->remain_exe_time == OSTCBPrioTbl[OSPrioCur]->exe_time)  /// ï¿½ï¿½Ü­ì¥»ï¿½ï¿½Taskï¿½wï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½iï¿½Jï¿½ï¿½ï¿½Ýªï¿½ï¿½A
             {
                 printf("Completion\t");
                 fprintf(Output_fp, "Completion\t");
                 /// CurrentTask
-                if (OSPrioCur == 63)  /// ¨ä¹ê¤£·|µo¥Í³oºØ±¡ªp
+                if (OSPrioCur == 63)  /// ï¿½ï¿½ê¤£ï¿½|ï¿½oï¿½Í³oï¿½Ø±ï¿½ï¿½p
                 {
                     printf("Task(%2d)\t", OSPrioCur);
                     fprintf(Output_fp, "Task(%2d)\t", OSPrioCur);
@@ -2077,19 +2077,19 @@ static  void  OS_SchedNew (void)
                 task_preempt_count[OSPrioCur] = 0;  
                 task_preempt_time_acc[OSPrioCur] = 0;
 
-                if (task_preempt_time[OSPrioHighRdy] != 0)  /// ¦³³Qpreemptªº¬ö¿ý
+                if (task_preempt_time[OSPrioHighRdy] != 0)  /// ï¿½ï¿½ï¿½Qpreemptï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 {
                     task_preempt_time_acc[OSPrioHighRdy] = task_preempt_time_acc[OSPrioHighRdy] + (OSTimeGet() - task_preempt_time[OSPrioHighRdy]);
                 }
 
-                task_preempt_count[OSPrioHighRdy]++;  /// ´«¹L¥h²Ä¤@¦¸¤]ºâ¡A¤~·|²Å¦XPA#1½d¨Ò
+                task_preempt_count[OSPrioHighRdy]++;  /// ï¿½ï¿½ï¿½Lï¿½hï¿½Ä¤@ï¿½ï¿½ï¿½]ï¿½ï¿½Aï¿½~ï¿½|ï¿½Å¦XPA#1ï¿½dï¿½ï¿½
 
                 job_number[OSPrioCur]++;
             }
-            /// =======================================¤@¯ëCompletion=======================================
+            /// =======================================ï¿½@ï¿½ï¿½Completion=======================================
 
-            /// =======================================¤@¯ëPreemption=======================================
-            else  /// ªí¥Ü­ì¥»ªºTask©|¥¼§¹¦¨¡Apreempt
+            /// =======================================ï¿½@ï¿½ï¿½Preemption=======================================
+            else  /// ï¿½ï¿½Ü­ì¥»ï¿½ï¿½Taskï¿½|ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Apreempt
             {
                 
                 printf("Preemption\t");
@@ -2117,15 +2117,15 @@ static  void  OS_SchedNew (void)
                     fprintf(Output_fp, "Task(%2d)(%2d)\n", OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, job_number[OSPrioHighRdy]);
                 }
 
-                task_preempt_time[OSPrioCur] = OSTimeGet();   /// °O¿ý¦ó®É³Qpreempt     
+                task_preempt_time[OSPrioCur] = OSTimeGet();   /// ï¿½Oï¿½ï¿½ï¿½ï¿½É³Qpreempt     
                 task_preempt_count[OSPrioCur]++;
 
-                /// task_preempt_time[OSPrioHighRdy] ¤£°Ê
+                /// task_preempt_time[OSPrioHighRdy] ï¿½ï¿½ï¿½ï¿½
                 task_preempt_count[OSPrioHighRdy]++;
                 
                 
             }
-            /// =======================================¤@¯ëPreemption=======================================
+            /// =======================================ï¿½@ï¿½ï¿½Preemption=======================================
         }
     }
     fclose(Output_fp);
@@ -2506,12 +2506,12 @@ INT8U  OS_TCBInit (INT8U    prio,
         /// PA#1 part1
         //printf("Task[%3.0d] created, TCB Address %9.0p\n", ptcb->OSTCBPrio, ptcb);
         //printf("------After TCB[%d] being linked------\n", ptcb->OSTCBPrio);
-        //printf("Previous TCB pint to address %9.0p\n", ptcb->OSTCBPrev);   /// (OS_TCB *)0¬°pointer type¡A¥Î%p
+        //printf("Previous TCB pint to address %9.0p\n", ptcb->OSTCBPrev);   /// (OS_TCB *)0ï¿½ï¿½pointer typeï¿½Aï¿½ï¿½%p
         //printf("Current  TCB pint to address %9.0p\n", ptcb);
         //printf("Next     TCB pint to address %9.0p\n\n", ptcb->OSTCBNext);
         /// PA#1 part1
 
-        /// PA#2 ªì©l¤ÆÃB¥~TCBÅÜ¼Æ
+        /// PA#2 ï¿½ï¿½lï¿½ï¿½ï¿½Bï¿½~TCBï¿½Ü¼ï¿½
         if (id == OS_TASK_IDLE_ID)
         {
             ptcb->arrive_time = 0;
@@ -2529,7 +2529,7 @@ INT8U  OS_TCBInit (INT8U    prio,
             ptcb->remain_exe_time = exe_time;
         }
 
-        /// PA#2 ¦pªGarrive time == 0¡A³]¬°ready¡F¤Ï¤§³]©wOSTCBDly = arrive_time
+        /// PA#2 ï¿½pï¿½Garrive time == 0ï¿½Aï¿½]ï¿½ï¿½readyï¿½Fï¿½Ï¤ï¿½ï¿½]ï¿½wOSTCBDly = arrive_time
         if (arrive_time == 0)
         {
             OSRdyGrp |= ptcb->OSTCBBitY;         /* Make task ready to run                   */

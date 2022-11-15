@@ -1,0 +1,12 @@
+﻿  os_core.c
+D:\ntust\EmbeddingOS\RTOS_M11107309_PA2\RTOS_M11107309_PA2_EDF\Micrium_Win32_Kernel\Micrium\Software\uCOS-II\Source\os_core.c(1002,17): warning C4013: 'exit' 未定義; 假設 extern 傳回整數
+  main.c
+D:\ntust\EmbeddingOS\RTOS_M11107309_PA2\RTOS_M11107309_PA2_EDF\Micrium_Win32_Kernel\Microsoft\Windows\Kernel\OS2\main.c(108,22): warning C4013: 'malloc' 未定義; 假設 extern 傳回整數
+D:\ntust\EmbeddingOS\RTOS_M11107309_PA2\RTOS_M11107309_PA2_EDF\Micrium_Win32_Kernel\Microsoft\Windows\Kernel\OS2\main.c(108,50): warning C4047: '=': 'OS_STK **' 與 'int' 間接取值的層級不同
+D:\ntust\EmbeddingOS\RTOS_M11107309_PA2\RTOS_M11107309_PA2_EDF\Micrium_Win32_Kernel\Microsoft\Windows\Kernel\OS2\main.c(112,59): warning C4047: '=': 'OS_STK *' 與 'int' 間接取值的層級不同
+D:\ntust\EmbeddingOS\RTOS_M11107309_PA2\RTOS_M11107309_PA2_EDF\Micrium_Win32_Kernel\Microsoft\Windows\Kernel\OS2\main.c(147,44): warning C4244: '函式': 將 'INT16U' 轉換為 'INT8U'，由於類型不同，可能導致資料遺失
+D:\ntust\EmbeddingOS\RTOS_M11107309_PA2\RTOS_M11107309_PA2_EDF\Micrium_Win32_Kernel\Microsoft\Windows\Kernel\OS2\main.c(148,47): warning C4244: '函式': 將 'INT16U' 轉換為 'INT8U'，由於類型不同，可能導致資料遺失
+D:\ntust\EmbeddingOS\RTOS_M11107309_PA2\RTOS_M11107309_PA2_EDF\Micrium_Win32_Kernel\Microsoft\Windows\Kernel\OS2\main.c(150,9): warning C4244: '函式': 將 'INT16U' 轉換為 'INT8U'，由於類型不同，可能導致資料遺失
+D:\ntust\EmbeddingOS\RTOS_M11107309_PA2\RTOS_M11107309_PA2_EDF\Micrium_Win32_Kernel\Microsoft\Windows\Kernel\OS2\main.c(90,17): warning C4101: 'os_err': 未參考的區域變數
+  正在產生程式碼...
+  OS2.vcxproj -> D:\ntust\EmbeddingOS\RTOS_M11107309_PA2\RTOS_M11107309_PA2_EDF\Micrium_Win32_Kernel\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe

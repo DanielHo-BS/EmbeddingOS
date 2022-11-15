@@ -89,7 +89,7 @@
 */
 
 void OutFileInit() {
-    /// «Ø¥ßtxtÀÉ
+    /// ï¿½Ø¥ï¿½txtï¿½ï¿½
     if ((Output_err = fopen_s(&Output_fp, OUTPUT_FILE_NAME, "w")) == 0)
         fclose(Output_fp);
     else
@@ -98,7 +98,7 @@ void OutFileInit() {
 
 void InputFile() {
     /// 
-    /// Åª¨útxtÀÉ
+    /// Åªï¿½ï¿½txtï¿½ï¿½
     /// Task Information:
     /// Task_ID, ArriveTime, ExecutionTime, Periodic
     /// 
@@ -116,7 +116,7 @@ void InputFile() {
     char* ptr;
     char* pTmp = NULL;
     int TaskInfo[INFO], i, j = 0;
-    TASK_NUMBER = 0;  /// HW1­n¨Dtask ID¬°1, 2
+    TASK_NUMBER = 0;  /// HW1ï¿½nï¿½Dtask IDï¿½ï¿½1, 2
     while (!feof(fp))
     {
         i = 0;
@@ -142,9 +142,9 @@ void InputFile() {
             i++;
         }
 
-        /// ³]©wTask Priority
-        /// TaskParameter[j].TaskPriority = j+1;  /// HW1­n¨Dpriority¬°1, 2
-        /// PA#1­n¨D¨Ï¥ÎRM scheduling rules¡A¥²¶·¥ýª¾¹D©Ò¦³Taskªºperiod¦A¨Ó¨M©w¦U­ÓTaskªºpriority
+        /// ï¿½]ï¿½wTask Priority
+        /// TaskParameter[j].TaskPriority = j+1;  /// HW1ï¿½nï¿½Dpriorityï¿½ï¿½1, 2
+        /// PA#1ï¿½nï¿½Dï¿½Ï¥ï¿½RM scheduling rulesï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Dï¿½Ò¦ï¿½Taskï¿½ï¿½periodï¿½Aï¿½Ó¨Mï¿½wï¿½Uï¿½ï¿½Taskï¿½ï¿½priority
 
         j++;
     }

@@ -89,7 +89,7 @@
 */
 
 void OutFileInit() {
-    /// «Ø¥ßtxtÀÉ
+    /// ï¿½Ø¥ï¿½txtï¿½ï¿½
     if ((Output_err = fopen_s(&Output_fp, OUTPUT_FILE_NAME, "w")) == 0)
         fclose(Output_fp);
     else
@@ -98,7 +98,7 @@ void OutFileInit() {
 
 void InputFile() {
     /// 
-    /// Åª¨útxtÀÉ
+    /// Åªï¿½ï¿½txtï¿½ï¿½
     /// Task Information:
     /// Task_ID, ArriveTime, ExecutionTime, Periodic
     /// 
@@ -152,7 +152,7 @@ void InputFile() {
 
 void InputAperiodicFile() {
     /// 
-    /// Åª¨útxtÀÉ
+    /// Åªï¿½ï¿½txtï¿½ï¿½
     /// Task Information:
     /// Jobs No., ArriveTime, ExecutionTime, Absolute Deadline
     /// 
