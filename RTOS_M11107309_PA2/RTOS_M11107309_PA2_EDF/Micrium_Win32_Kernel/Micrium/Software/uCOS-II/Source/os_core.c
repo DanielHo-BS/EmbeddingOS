@@ -876,7 +876,7 @@ void  OSStart (void)
         OSTCBHighRdy  = OSTCBPrioTbl[OSPrioHighRdy]; /* Point to highest priority task ready to run    */
         OSTCBCur      = OSTCBHighRdy;
         /// PA#1
-        printf("\nTick\tEvent\t       CurrentTask ID\t NextTask ID    ResponseTime  #of ContextSwitch   PreemptionTime OSTimeDly\n");
+        printf("\nTick\tEvent\t       CurrentTask ID\t NextTask ID      ResponseTime  #of ContextSwitch  PreemptionTime  OSTimeDly\n");
         OSStartHighRdy();                            /* Execute target specific code to start task     */
     }
 }
@@ -1095,19 +1095,19 @@ void  OSTimeTick (void)
                 printf("can't open Output.txt");
                 exit(0);
             }
-            printf("%2d\t", OSTimeGet());
-            fprintf(Output_fp, "%2d\t", OSTimeGet());
+            printf("%2d\t  ", OSTimeGet());
+            fprintf(Output_fp, "%2d\t  ", OSTimeGet());
 
             printf("MissDeadline\t");
             fprintf(Output_fp, "MissDeadline\t");
 
             /// CurrentTask
-            printf("  task(%2d)(%2d)\t", OSTCBPrioTbl[miss_deadline_prio]->OSTCBId, job_number[miss_deadline_prio]);
-            fprintf(Output_fp, "  task(%2d)(%2d)\t", OSTCBPrioTbl[miss_deadline_prio]->OSTCBId, job_number[miss_deadline_prio]);
+            printf(" task(%2d)(%2d)", OSTCBPrioTbl[miss_deadline_prio]->OSTCBId, job_number[miss_deadline_prio]);
+            fprintf(Output_fp, " task(%2d)(%2d)", OSTCBPrioTbl[miss_deadline_prio]->OSTCBId, job_number[miss_deadline_prio]);
 
             /// NextTask
-            printf("------------\n");
-            fprintf(Output_fp, "------------\n");
+            printf("    ------------\n");
+            fprintf(Output_fp, "    ------------\n");
 
             /// =======================================miss deadline handling=======================================
             printf("========== Drop task(%2d)(%2d) at tick %2d with remaining execution time %2d. ==========\n", \
@@ -1942,8 +1942,8 @@ static  void  OS_SchedNew (void)
         else
         {
             /// =======================================Completion=======================================
-            printf("%2d\t", OSTimeGet());
-            fprintf(Output_fp, "%2d\t", OSTimeGet());
+            printf("%2d\t  ", OSTimeGet());
+            fprintf(Output_fp, "%2d\t  ", OSTimeGet());
             if (OSTCBPrioTbl[OSPrioCur]->remain_exe_time == OSTCBPrioTbl[OSPrioCur]->exe_time)  /// the task is finished and ready
             {
                 printf("Completion\t ");
@@ -1951,35 +1951,35 @@ static  void  OS_SchedNew (void)
                 /// CurrentTask
                 if (OSPrioCur == 63)  /// it don't happen
                 {
-                    printf("task(%2d)    \t", OSPrioCur);
-                    fprintf(Output_fp, "task(%2d)    \t", OSPrioCur);
+                    printf("task(%2d)    ", OSPrioCur);
+                    fprintf(Output_fp, "task(%2d)    ", OSPrioCur);
                 }
                 else
                 {
-                    printf("task(%2d)(%2d)\t", OSTCBPrioTbl[OSPrioCur]->OSTCBId, job_number[OSPrioCur]);
-                    fprintf(Output_fp, "task(%2d)(%2d)\t", OSTCBPrioTbl[OSPrioCur]->OSTCBId, job_number[OSPrioCur]);
+                    printf("task(%2d)(%2d)", OSTCBPrioTbl[OSPrioCur]->OSTCBId, job_number[OSPrioCur]);
+                    fprintf(Output_fp, "task(%2d)(%2d)", OSTCBPrioTbl[OSPrioCur]->OSTCBId, job_number[OSPrioCur]);
                 }
                 /// NextTask
                 if (OSPrioHighRdy == 63)
                 {
-                    printf(" task(%2d)    \t", OSPrioHighRdy);
-                    fprintf(Output_fp, " task(%2d)    \t", OSPrioHighRdy);
+                    printf("    task(%2d)    \t", OSPrioHighRdy);
+                    fprintf(Output_fp, "    task(%2d)    \t", OSPrioHighRdy);
                 }
                 else
                 {
-                    printf(" task(%2d)(%2d)\t", OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, job_number[OSPrioHighRdy]);
-                    fprintf(Output_fp, " task(%2d)(%2d)\t", OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, job_number[OSPrioHighRdy]);
+                    printf("    task(%2d)(%2d)\t", OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, job_number[OSPrioHighRdy]);
+                    fprintf(Output_fp, "    task(%2d)(%2d)\t", OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, job_number[OSPrioHighRdy]);
                 }
                 /// ResponseTime
-                printf("%8d\t", response_time);
-                fprintf(Output_fp, "%8d\t", response_time);
+                printf("%10d\t\t", response_time);
+                fprintf(Output_fp, "%10d\t\t", response_time);
                 /// # of ContextSwitch
                 task_preempt_count[OSPrioCur]++;
                 printf("%7d\t\t", task_preempt_count[OSPrioCur]);
                 fprintf(Output_fp, "%7d\t\t", task_preempt_count[OSPrioCur]);
                 /// PreemptionTime
-                printf("%7d\t\t", task_preempt_time_acc[OSPrioCur]);
-                fprintf(Output_fp, "%7d\t\t", task_preempt_time_acc[OSPrioCur]);
+                printf("%4d\t\t", task_preempt_time_acc[OSPrioCur]);
+                fprintf(Output_fp, "%4d\t\t", task_preempt_time_acc[OSPrioCur]);
                 /// OSTimeDly = period - responseTime
                 if ((OSTCBCur->period - response_time) != 0 )
                 {
@@ -2016,24 +2016,24 @@ static  void  OS_SchedNew (void)
                 /// CurrentTask
                 if (OSPrioCur == 63)
                 {
-                    printf("task(%2d)    \t", OSPrioCur);
-                    fprintf(Output_fp, "task(%2d)    \t", OSPrioCur);
+                    printf("task(%2d)    ", OSPrioCur);
+                    fprintf(Output_fp, "task(%2d)    ", OSPrioCur);
                 }
                 else
                 {
-                    printf("task(%2d)(%2d)\t", OSTCBPrioTbl[OSPrioCur]->OSTCBId, job_number[OSPrioCur]);
-                    fprintf(Output_fp, "task(%2d)(%2d)\t", OSTCBPrioTbl[OSPrioCur]->OSTCBId, job_number[OSPrioCur]);
+                    printf("task(%2d)(%2d)", OSTCBPrioTbl[OSPrioCur]->OSTCBId, job_number[OSPrioCur]);
+                    fprintf(Output_fp, "task(%2d)(%2d)", OSTCBPrioTbl[OSPrioCur]->OSTCBId, job_number[OSPrioCur]);
                 }
                 /// NextTask
                 if (OSPrioHighRdy == 63)
                 {
-                    printf(" task(%2d)    \n", OSPrioHighRdy);
-                    fprintf(Output_fp, " task(%2d)    \n", OSPrioHighRdy);
+                    printf("    task(%2d)    \n", OSPrioHighRdy);
+                    fprintf(Output_fp, "    task(%2d)    \n", OSPrioHighRdy);
                 }
                 else
                 {
-                    printf(" task(%2d)(%2d)\n", OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, job_number[OSPrioHighRdy]);
-                    fprintf(Output_fp, " task(%2d)(%2d)\n", OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, job_number[OSPrioHighRdy]);
+                    printf("    task(%2d)(%2d)\n", OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, job_number[OSPrioHighRdy]);
+                    fprintf(Output_fp, "    task(%2d)(%2d)\n", OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, job_number[OSPrioHighRdy]);
                 }
 
                 task_preempt_time[OSPrioCur] = OSTimeGet();   /// save the preemptTime    
