@@ -1971,20 +1971,20 @@ static  void  OS_SchedNew (void)
                     fprintf(Output_fp, "    task(%2d)(%2d)\t", OSTCBPrioTbl[OSPrioHighRdy]->OSTCBId, job_number[OSPrioHighRdy]);
                 }
                 /// ResponseTime
-                printf("%10d\t\t", response_time);
-                fprintf(Output_fp, "%10d\t\t", response_time);
+                printf("%10d", response_time);
+                fprintf(Output_fp, "%10d", response_time);
                 /// # of ContextSwitch
                 task_preempt_count[OSPrioCur]++;
-                printf("%7d\t\t", task_preempt_count[OSPrioCur]);
-                fprintf(Output_fp, "%7d\t\t", task_preempt_count[OSPrioCur]);
+                printf("%15d", task_preempt_count[OSPrioCur]);
+                fprintf(Output_fp, "%15d", task_preempt_count[OSPrioCur]);
                 /// PreemptionTime
-                printf("%4d\t\t", task_preempt_time_acc[OSPrioCur]);
-                fprintf(Output_fp, "%4d\t\t", task_preempt_time_acc[OSPrioCur]);
+                printf("%15d\t", task_preempt_time_acc[OSPrioCur]);
+                fprintf(Output_fp, "%15d\t", task_preempt_time_acc[OSPrioCur]);
                 /// OSTimeDly = period - responseTime
                 if ((OSTCBCur->period - response_time) != 0 )
                 {
-                    printf("%5d\n", OSTCBCur->period - response_time);
-                    fprintf(Output_fp, "%5d\n", OSTCBCur->period - response_time);
+                    printf("%11d\n", OSTCBCur->period - response_time);
+                    fprintf(Output_fp, "%11d\n", OSTCBCur->period - response_time);
                 }
                 else
                 {
